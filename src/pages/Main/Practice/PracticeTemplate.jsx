@@ -59,6 +59,7 @@ export const PracticeTemplate = ({codes}) => {
             direction={"column"}
             alignItems={"center"}
             spacing={2.5}
+            width={"100%"}
         >
             {
                 !isFinished ? (
@@ -66,6 +67,10 @@ export const PracticeTemplate = ({codes}) => {
                         direction={"column"}
                         alignItems={"center"}
                         spacing={2.5}
+                        width={"100%"}
+                        sx={{
+                            px: 1.25,
+                        }}
                     >
                         <Typography
                             variant={"h1"}
@@ -75,8 +80,8 @@ export const PracticeTemplate = ({codes}) => {
                         <PianoKeyboard
                             selectedCodes={[codes[currIdx], ]}
                             sx={{
-                                width: 400,
-                                height: 200,
+                                maxWidth: 400,
+                                maxHeight: 200,
                             }}
                         />
                         <Typography
@@ -90,6 +95,10 @@ export const PracticeTemplate = ({codes}) => {
                         direction={"column"}
                         alignItems={"center"}
                         spacing={2.5}
+                        width={"100%"}
+                        sx={{
+                            px: 1.25,
+                        }}
                     >
                         <Stack
                             direction={"column"}
@@ -109,8 +118,8 @@ export const PracticeTemplate = ({codes}) => {
                         <PianoKeyboard
                             selectedCodes={successCodes}
                             sx={{
-                                width: 400,
-                                height: 200,
+                                maxWidth: 400,
+                                maxHeight: 200,
                             }}
                         />
                         <Stack
@@ -131,8 +140,8 @@ export const PracticeTemplate = ({codes}) => {
                         <PianoKeyboard
                             selectedCodes={failedCodes}
                             sx={{
-                                width: 400,
-                                height: 200,
+                                maxWidth: 400,
+                                maxHeight: 200,
                             }}
                         />
                         <Button

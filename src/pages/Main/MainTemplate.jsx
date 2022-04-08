@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Button, Checkbox, FormControlLabel, Stack, Typography} from "@mui/material";
+import {Box, Button, Checkbox, FormControlLabel, Stack, Typography} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import {PianoKeyboard} from "../../common/templates/PianoKeyboard";
 import {CODES, codesToString} from "../../common/utils/codes";
@@ -53,6 +53,10 @@ export const MainTemplate = () => {
             direction={"column"}
             spacing={2.5}
             alignItems={"center"}
+            width={"100%"}
+            sx={{
+                px: 1.25
+            }}
         >
             <FormControlLabel
                 control={<Checkbox onClick={handleSelectAll} />}

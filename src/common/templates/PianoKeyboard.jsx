@@ -12,8 +12,10 @@ export const PianoKeyboard = ({selectedCodes, handleClick, sx}) => {
         <Stack
             direction={"row"}
             sx={{
-                width: 500,
-                height: 250,
+                maxWidth: 500,
+                maxHeight: 250,
+                width: "100%",
+                aspectRatio: "2",
                 ...sx,
             }}
         >
