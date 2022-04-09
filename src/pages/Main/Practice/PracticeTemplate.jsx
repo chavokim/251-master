@@ -1,11 +1,13 @@
 import React, {useEffect, useState} from "react";
 import {Button, Stack, Typography} from "@mui/material";
 import {PianoKeyboard} from "../../../common/templates/PianoKeyboard";
-import {codesToString} from "../../../common/utils/codes";
+import {CODES, codesToString} from "../../../common/utils/codes";
 import {useNavigate} from "react-router-dom";
+import moment from "moment";
+import {getItem, getTodayKey, getTotalKey, setItem} from "../../../common/utils/localStorage";
 
-export const PracticeTemplate = ({codes}) => {
-    const [seconds, setSeconds] = useState(10);
+export const PracticeTemplate = ({codes, practiceTime}) => {
+    const [seconds, setSeconds] = useState(practiceTime);
     const [isTested, setIsTested] = useState(false);
     const [isFinished, setIsFinished] = useState(false);
     const [failedCodes, setFailedCodes] = useState([]);
@@ -13,6 +15,30 @@ export const PracticeTemplate = ({codes}) => {
     const [currIdx, setCurrIdx] = useState(0);
 
     const navigate = useNavigate();
+
+    const isFailedCode = (code) => {
+        if(failedCodes.some(_code => _code === code)) {
+            return 1;
+        }
+        return 0;
+    }
+
+    const setFailedResult = (key) => {
+        const result = getItem(key);
+        if(result) {
+            const newResult = Object.keys(result).reduce((acc, curr) => ({
+                ...acc,
+                [curr]: result[curr] + isFailedCode(curr),
+            }), {})
+            setItem(key, newResult);
+        } else {
+            const newResult = CODES.reduce((acc, curr) => ({
+                ...acc,
+                [curr]: isFailedCode(curr),
+            }), {})
+            setItem(key, newResult);
+        }
+    }
 
     useEffect(() => {
         if(!seconds) {
@@ -25,6 +51,14 @@ export const PracticeTemplate = ({codes}) => {
         }, 1000);
 
     }, [seconds])
+
+    useEffect(() => {
+        if(isFinished) {
+            const todayKey = getTodayKey("251");
+            setFailedResult(todayKey);
+            setFailedResult(getTotalKey("251"));
+        }
+    }, [isFinished])
 
     const handleSubmit = (e) => {
         const {name} = e.target;
@@ -46,12 +80,16 @@ export const PracticeTemplate = ({codes}) => {
             return;
         }
         setCurrIdx(prev => prev + 1);
-        setSeconds(10);
+        setSeconds(practiceTime);
         setIsTested(false);
     }
 
     const redirectToMain = () => {
         navigate("/");
+    }
+
+    const redirectToResult = () => {
+        window.location.href = "/result"
     }
 
     return (
@@ -144,13 +182,22 @@ export const PracticeTemplate = ({codes}) => {
                                 maxHeight: 200,
                             }}
                         />
-                        <Button
-                            variant={"contained"}
-                            color={"primary"}
-                            onClick={redirectToMain}
-                        >
-                            다시 돌아가기
-                        </Button>
+                        <Stack direction={"row"} spacing={2.5}>
+                            <Button
+                                variant={"contained"}
+                                color={"primary"}
+                                onClick={redirectToResult}
+                            >
+                                총 결과 보기
+                            </Button>
+                            <Button
+                                variant={"contained"}
+                                color={"secondary"}
+                                onClick={redirectToMain}
+                            >
+                                다시 돌아가기
+                            </Button>
+                        </Stack>
                     </Stack>
                 )
             }

@@ -1,11 +1,12 @@
 import React, {useState} from "react";
-import {Box, Button, Checkbox, FormControlLabel, Stack, Typography} from "@mui/material";
+import {Box, Button, Checkbox, FormControlLabel, Slider, Stack, TextField, Typography} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import {PianoKeyboard} from "../../common/templates/PianoKeyboard";
 import {CODES, codesToString} from "../../common/utils/codes";
 
 export const MainTemplate = () => {
     const [selectedCodes, setSelectedCodes] = useState([]);
+    const [practiceTime, setPracticeTime] = useState(10);
     const navigate = useNavigate();
 
     const handleSelectAll = (e) => {
@@ -43,7 +44,10 @@ export const MainTemplate = () => {
             return acc + "," +curr
         }, "");
 
-        const params = new URLSearchParams({ "codesString": codesString });
+        const params = new URLSearchParams({
+            "codesString": codesString,
+            "practiceTime": practiceTime
+        });
 
         navigate(`/practice?${params.toString()}`);
     }
@@ -81,6 +85,34 @@ export const MainTemplate = () => {
                 selectedCodes={selectedCodes}
                 handleClick={handleClick}
             />
+            <Typography
+                variant={"h5"}
+            >
+                Practice Time
+            </Typography>
+            <Stack
+                direction={"row"}
+                spacing={1}
+                width={300}
+            >
+                <Box sx={{ minWidth: 240 }}>
+                    <Slider
+                        value={practiceTime}
+                        onChange={(e) => setPracticeTime(e.target.value)}
+                        step={1}
+                        valueLabelDisplay="on"
+                        max={60}
+                        min={1}
+                    />
+                </Box>
+                <TextField
+                    type={"number"}
+                    min={1}
+                    max={60}
+                    value={practiceTime}
+                    onChange={(e) => setPracticeTime(e.target.value)}
+                />
+            </Stack>
             <Button
                 disabled={!selectedCodes.length}
                 variant={"contained"}
